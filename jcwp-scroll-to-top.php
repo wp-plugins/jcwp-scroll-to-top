@@ -43,8 +43,8 @@
             add_option('jcorgstp_linkback','No');
     }
     
-    add_action("admin_menu","jcorgbotdetector_menu");
-    function jcorgbotdetector_menu() {
+    add_action("admin_menu","jcorgstp_menu");
+    function jcorgstp_menu() {
         add_options_page('JCWP SrollToTop', 'JCWP Scroll To Top', 'manage_options', 'jcorgstp-plugin', 'jcorgstp_plugin_options');
     }
     add_action('admin_init','jcorgstp_regsettings');
