@@ -76,7 +76,7 @@
     function jcorgstp_init() {        
         wp_enqueue_script('jquery');
         wp_enqueue_script('jquery-ui-core');    
-        wp_enqueue_script('jcorgstp_script',plugins_url("jcScrollTop.min.js",__FILE__));
+        wp_enqueue_script('jcorgstp_script',plugins_url("jcScrollTop.min.js",__FILE__), array('jquery', 'jquery-ui-core', 'jquery-effects-core'),'1.0');
             
     }
     add_action('wp_footer','jcorgstp_inclscript',20);
