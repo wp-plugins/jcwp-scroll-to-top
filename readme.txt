@@ -38,6 +38,8 @@ Yes, Whenever I get some time. Please support me by donating a penny to assure c
 
 = 1.0.0 =
 * Initial Release
+= 1.1.0 =
+* Fixed jquery effects not getting included
 
 == Screenshots ==-
 
