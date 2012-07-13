@@ -26,7 +26,7 @@ Visit my site http://jaspreetchahal.org to get help on this plugin or more preci
 
 1. Upload unzipped plugin directory to the /wp-content/plugins/ directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Use the Bot detector Options on left configure your preferences.
+3. Use the "jcwp srcoll to top" Options under settings.
 
 == Frequently Asked Questions ==
 
