@@ -4,7 +4,7 @@
     Plugin URI: http://jaspreetchahal.org/wordpress-scroll-to-top-plugin
     Description: This plugin gives you granular control on styles and positioning of your 'Scroll to top' text. Many variety of easing animations supported.  
     Author: Jaspreet Chahal
-    Version: 1.0
+    Version: 1.2
     Author URI: http://jaspreetchahal.org
     License: GPLv2 or later
     */
