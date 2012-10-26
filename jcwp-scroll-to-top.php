@@ -76,7 +76,7 @@
     function jcorgstp_init() {        
         wp_enqueue_script('jquery');
         wp_enqueue_script('jquery-ui-core');    
-        wp_enqueue_script('jcorgstp_script',plugins_url("jcScrollTop.min.js",__FILE__), array('jquery', 'jquery-ui-core', 'jquery-effects-core'),'1.0');
+        wp_enqueue_script('jcorgstp_script',plugins_url("jcScrollTop.min.js",__FILE__), array('jquery', 'jquery-ui-core', 'jquery-effects-core'),'1.3');
             
     }
     add_action('wp_footer','jcorgstp_inclscript',20);
@@ -84,7 +84,7 @@
         if(get_option('jcorgstp_active') == "1") {
         ?> 
          <script> 
-         jQuery(document).ready(function(){
+         jQuery(window).load(function() {
             jQuery().jcScrollTop({
                 duration:<?php echo strlen(trim(get_option("jcorgstp_duration")))>0?trim(get_option("jcorgstp_duration")):'1000'?>, 
                scroleActivateAt:<?php echo strlen(trim(get_option("jcorgstp_scroleActivateAt")))>0?trim(get_option("jcorgstp_scroleActivateAt")):'200'?>,
