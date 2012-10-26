@@ -4,7 +4,7 @@
     Plugin URI: http://jaspreetchahal.org/wordpress-scroll-to-top-plugin
     Description: This plugin gives you granular control on styles and positioning of your 'Scroll to top' text. Many variety of easing animations supported.  
     Author: Jaspreet Chahal
-    Version: 1.3
+    Version: 1.4
     Author URI: http://jaspreetchahal.org
     License: GPLv2 or later
     */
@@ -20,7 +20,8 @@
     if(preg_match('/admin\.php/',$_SERVER['REQUEST_URI']) && is_admin() == false) {
         return false;
     }
-    
+    require_once 'JCUCNMobile_Detect.php';
+    $detectjcucn = new JCUCNMobile_Detect();
     register_activation_hook(__FILE__,'jcorgstp_activate');
     function jcorgstp_activate() {
             add_option('jcorgstp_active','1');
@@ -36,9 +37,12 @@
             add_option('jcorgstp_fontSize','15px');
             add_option('jcorgstp_fontWeight','bold');
             add_option('jcorgstp_textPadding','5px');
+            add_option('jcorgstp_zindex','999999 !important');
             add_option('jcorgstp_containerWidth','120px');
             add_option('jcorgstp_containerBorder','#960404');
             add_option('jcorgstp_borderRadius','10px 10px 0px 0px');
+            add_option('jcorgstp_disableon_tablet','');
+            add_option('jcorgstp_disableon_mobile','');
             add_option('jcorgstp_callback','function(){}');
             add_option('jcorgstp_linkback','No');
     }
@@ -63,28 +67,39 @@
         register_setting("jcorgstp-setting","jcorgstp_fontWeight");     
         register_setting("jcorgstp-setting","jcorgstp_textPadding");     
         register_setting("jcorgstp-setting","jcorgstp_containerWidth");     
+        register_setting("jcorgstp-setting","jcorgstp_zindex");     
         register_setting("jcorgstp-setting","jcorgstp_containerBorder");     
         register_setting("jcorgstp-setting","jcorgstp_borderRadius");     
-        register_setting("jcorgstp-setting","jcorgstp_callback");     
-        register_setting("jcorgstp-setting","jcorgstp_linkback");    
+        register_setting("jcorgstp-setting","jcorgstp_callback");
+        register_setting("jcorgstp-setting","jcorgstp_disableon_mobile");
+        register_setting("jcorgstp-setting","jcorgstp_disableon_tablet");
+        register_setting("jcorgstp-setting","jcorgstp_linkback");
         wp_enqueue_script('jquery');
         wp_enqueue_script('jqueryui');
     }
     
     
     add_action('init','jcorgstp_init');
-    function jcorgstp_init() {        
+    function jcorgstp_init() {
+        global $detectjcucn;
+        if((get_option("jcorgstp_disableon_mobile") == "Yes" && $detectjcucn->isMobile()) || (get_option("jcorgstp_disableon_tablet") == "Yes" && $detectjcucn->isTablet())) {
+            return;
+        }
         wp_enqueue_script('jquery');
         wp_enqueue_script('jquery-ui-core');    
-        wp_enqueue_script('jcorgstp_script',plugins_url("jcScrollTop.min.js",__FILE__), array('jquery', 'jquery-ui-core', 'jquery-effects-core'),'1.0');
+        wp_enqueue_script('jcorgstp_script',plugins_url("jcScrollTop.min.js",__FILE__), array('jquery', 'jquery-ui-core', 'jquery-effects-core'),'1.3');
             
     }
     add_action('wp_footer','jcorgstp_inclscript',20);
     function jcorgstp_inclscript() {
+        global $detectjcucn;
+        if((get_option("jcorgstp_disableon_mobile") == "Yes" && $detectjcucn->isMobile()) || (get_option("jcorgstp_disableon_tablet") == "Yes" && $detectjcucn->isTablet())) {
+            return;
+        }
         if(get_option('jcorgstp_active') == "1") {
         ?> 
          <script> 
-         jQuery(document).ready(function(){
+         jQuery(window).load(function() {
             jQuery().jcScrollTop({
                 duration:<?php echo strlen(trim(get_option("jcorgstp_duration")))>0?trim(get_option("jcorgstp_duration")):'1000'?>, 
                scroleActivateAt:<?php echo strlen(trim(get_option("jcorgstp_scroleActivateAt")))>0?trim(get_option("jcorgstp_scroleActivateAt")):'200'?>,
@@ -95,8 +110,9 @@
                backgroundColor:'<?php echo strlen(trim(get_option("jcorgstp_backgroundColor")))>0?trim(get_option("jcorgstp_backgroundColor")):'#c00'?>',
                foreColor:"<?php echo strlen(trim(get_option("jcorgstp_foreColor")))>0?trim(get_option("jcorgstp_foreColor")):'#FFF'?>",
                fontFamily:"<?php echo strlen(trim(get_option("jcorgstp_fontFamily")))>0?trim(get_option("jcorgstp_fontFamily")):'Calibri'?>",
-               fontSize:'<?php echo strlen(trim(get_option("jcorgstp_fontSize")))>0?trim(get_option("jcorgstp_fontSize")):'15px'?>',
-               fontWeight:'<?php echo strlen(trim(get_option("jcorgstp_fontWeight")))>0?trim(get_option("jcorgstp_fontWeight")):'bold'?>',
+                fontSize:'<?php echo strlen(trim(get_option("jcorgstp_fontSize")))>0?trim(get_option("jcorgstp_fontSize")):'15px'?>',
+                zIndex:'<?php echo strlen(trim(get_option("jcorgstp_zindex")))>0?trim(get_option("jcorgstp_zindex")):'1 !important'?>',
+                fontWeight:'<?php echo strlen(trim(get_option("jcorgstp_fontWeight")))>0?trim(get_option("jcorgstp_fontWeight")):'bold'?>',
                textPadding:'<?php echo strlen(trim(get_option("jcorgstp_textPadding")))>0?trim(get_option("jcorgstp_textPadding")):'5px'?>',
                containerWidth:'<?php echo strlen(trim(get_option("jcorgstp_containerWidth")))>0?trim(get_option("jcorgstp_containerWidth")):'120px'?>',
                containerBorder:'2px solid <?php echo strlen(trim(get_option("jcorgstp_containerBorder")))>0?trim(get_option("jcorgstp_containerBorder")):'#960404'?>',
@@ -176,7 +192,12 @@
                 <tr valign="top">
                     <th scope="row">Show Element ID</th>
                     <td><input type="text" name="jcorgstp_scrollElementId"
-                            value="<?php echo get_option('jcorgstp_scrollElementId'); ?>"  style="padding:5px" size="40"/></td>
+                               value="<?php echo get_option('jcorgstp_scrollElementId'); ?>"  style="padding:5px" size="40"/></td>
+                </tr>
+                <tr valign="top">
+                    <th scope="row">Element Z-Index</th>
+                    <td><input type="text" name="jcorgstp_zindex"
+                               value="<?php echo get_option('jcorgstp_zindex'); ?>"  style="padding:5px" size="40"/> (value with !important is recommended in many cases)</td>
                 </tr>
                 <tr valign="top">
                     <th scope="row">Easing type</th>
@@ -286,12 +307,21 @@
                             If you want to glue some function to be called when scroll to top has finished. <br><Strong>Leave blank if not required or just keep the default value</strong></td>
                 </tr> 
                 <tr valign="top">
+                    <th scope="row">Disable on</th>
+                    <td>
+                        <input type="checkbox" name="jcorgstp_disableon_mobile"
+                            value="Yes" <?php if(get_option('jcorgstp_disableon_mobile') =="Yes") echo "checked='checked'";?> /> Mobile Phones <br>
+                        <input type="checkbox" name="jcorgstp_disableon_tablet"
+                            value="Yes" <?php if(get_option('jcorgstp_disableon_tablet') =="Yes") echo "checked='checked'";?> /> Tablets
+                            </td>
+                </tr>
+                <tr valign="top">
                     <th scope="row">Link to authors website</th>
                     <td><input type="checkbox" name="jcorgstp_linkback"
-                            value="Yes" <?php if(get_option('jcorgstp_linkback') =="Yes") echo "checked='checked'";?> /> <br>
-                            <Strong>An inivisible link will be placed in the footer which points to http://jaspreetchahal.org</strong></td>
-                </tr> 
-        </table>
+                               value="Yes" <?php if(get_option('jcorgstp_linkback') =="Yes") echo "checked='checked'";?> /> <br>
+                        <Strong>An un-noticeable link will be placed in the footer which points to authors website http://jaspreetchahal.org. Please check this checkbox to support this plugin in future.</strong></td>
+                </tr>
+            </table>
         <p class="submit">
             <input type="submit" class="button-primary"
                 value="Save Changes" />
