@@ -79,7 +79,7 @@
     }
     
     
-    add_action('init','jcorgstp_init');
+    add_action('wp_head','jcorgstp_init');
     function jcorgstp_init() {
         global $detectjcucn;
         if((get_option("jcorgstp_disableon_mobile") == "Yes" && $detectjcucn->isMobile()) || (get_option("jcorgstp_disableon_tablet") == "Yes" && $detectjcucn->isTablet())) {
