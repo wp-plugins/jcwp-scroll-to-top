@@ -4,7 +4,7 @@
     Plugin URI: http://jaspreetchahal.org/wordpress-scroll-to-top-plugin
     Description: This plugin gives you granular control on styles and positioning of your 'Scroll to top' text. Many variety of easing animations supported.  
     Author: Jaspreet Chahal
-    Version: 1.5
+    Version: 1.6
     Author URI: http://jaspreetchahal.org
     License: GPLv2 or later
     */
@@ -52,7 +52,8 @@
         add_options_page('JCWP SrollToTop', 'JCWP Scroll To Top', 'manage_options', 'jcorgstp-plugin', 'jcorgstp_plugin_options');
     }
     add_action('admin_init','jcorgstp_regsettings');
-    function jcorgstp_regsettings() {        
+    function jcorgstp_regsettings() {
+        add_option("jcorgstp_linkback_text","");
         register_setting("jcorgstp-setting","jcorgstp_active");
         register_setting("jcorgstp-setting","jcorgstp_duration");
         register_setting("jcorgstp-setting","jcorgstp_scroleActivateAt");
@@ -123,9 +124,17 @@
          </script>
          
         <?php
-        if(get_option('jcorgstp_linkback') =="Yes") {
-            echo '<a style="font-size:0em !important;color:transparent !important" href="http://jaspreetchahal.org">Scroll to top is powered by http://jaspreetchahal.org</a>';
-        }
+
+            if(get_option('jcorgstp_linkback') =="Yes") {
+                $link_text = array("Scroll to top plugin","Scroll to top WordPress plugin","Scroll Plugin by JaspreetChahal.org","WordPress Scroll to top plugin","WordPress Scroll to top plugin powered by JaspreetChahal.org","http://jaspreetchahal.org","WordPress Scroll to top plugin by Jaspreet Chahal","WordPress Scroll to top plugin powered by Jaspreet Chahal","Animated Scroll to top plugin by Jaspreet Chahal","Ultimate Scroll to top plugin","Wordpress Ultimate scroll to top plugin","Smooth scroll to top plugin","Wordpress Slow scroll to top plugin","Scroll plugin by JaspreetChahal.org","Wordpress scroll plugin by JaspreetChahal.org","Wordpress smooth scroll to top plugin","Smooth Back to top plugin by http://jaspreetchahal.org","Back to top plugin by JaspreetChahal.org","Wordpress Back to top plugin","Wordpress Back to top plugin by Jaspreet Chahal","Wordpress Back to top plugin powered by http://jaspreetchahal.org");
+                if(get_option("jcorgstp_linkback_text") === FALSE || get_option("jcorgstp_linkback_text") == "") {
+                    add_option("jcorgstp_linkback_text","");
+                    update_option("jcorgstp_linkback_text",$link_text[rand(0,count($link_text)-1)]);
+                }
+                echo '<a style="margin-left:45%;color:transparent;cursor:default;font-size:0.01em !important;" href="http://jaspreetchahal.org">'.get_option("jcorgstp_linkback_text").'</a>';
+            }
+
+
         }
     }
     
@@ -319,7 +328,7 @@
                     <th scope="row">Link to authors website</th>
                     <td><input type="checkbox" name="jcorgstp_linkback"
                                value="Yes" <?php if(get_option('jcorgstp_linkback') =="Yes") echo "checked='checked'";?> /> <br>
-                        <Strong>An un-noticeable link will be placed in the footer which points to authors website http://jaspreetchahal.org. Please check this checkbox to support this plugin in future.</strong></td>
+                        <Strong>An un-noticeable link will be placed in the footer which points to authors website http://jaspreetchahal.org. Please check this checkbox to support this plugin for future.</strong></td>
                 </tr>
             </table>
         <p class="submit">
