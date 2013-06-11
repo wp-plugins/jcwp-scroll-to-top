@@ -55,8 +55,8 @@ Yes, Whenever I get some time. Please support me by donating a penny to assure c
 * Compatibility with WP 3.5
 * Fixed centering issue in Tablets
 
-= 1.5.2 =
-* Tested Compatibility with WP 3.5.1
+= 1.6.0 =
+* Tested Compatibility with WP 3.5.1 and optional link back text will be picked from set of values
 
 
 == Screenshots ==-
